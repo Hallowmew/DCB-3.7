@@ -1,0 +1,103 @@
+import math
+import random
+from tkinter import *
+import re # for splitting text into sentences
+
+
+with open("text.txt", encoding="utf-8") as f:
+    text_string = f.read()
+
+
+positive_words = ["Good", "Fine", "Amazing", "Epic", "Cool"]
+
+
+def split_text_into_sentences(text):
+    
+    text = text.replace("\n", " ")
+    
+    sentences = re.split(r"[.?!]\s+", text)
+    
+    return sentences
+
+
+sentences = split_text_into_sentences(text_string)
+
+
+filtered_sentences = []
+
+
+for sentence in sentences:
+    
+    if len(sentence) >= 25:
+        
+        if any(word in sentence for word in positive_words):
+            
+            filtered_sentences.append(sentence)
+
+
+root = Tk()
+
+
+text = Text(root)
+
+
+text.pack()
+
+
+for sentence in filtered_sentences:
+    text.insert(END, sentence + "\n")
+
+
+for word in positive_words:
+    
+    start_index = '1.0'
+    
+    while True:
+        
+        start_index = text.search(word, start_index, END)
+        
+        if not start_index:
+            break
+        
+        end_index = f"{start_index}+{len(word)}c"
+        
+        text.tag_add("highlight", start_index, end_index)
+        
+        start_index = end_index
+    
+    text.tag_config("highlight", background="yellow")
+
+    
+frame = Frame(root)
+
+
+chat = Text(frame)
+
+
+entry = Entry(frame)
+
+
+frame.pack()
+chat.pack(side=LEFT)
+entry.pack(side=RIGHT)
+
+
+def generate_text(event):
+    
+    user_input = entry.get()
+    
+    entry.delete(0, END)
+    
+    chat.insert(END, "User: " + user_input + "\n")
+   
+    response = random.choice(filtered_sentences)
+   
+    chat.insert(END, "Bing: " + response + "\n")
+
+
+entry.bind("<Return>", generate_text)
+
+
+
+
+root.mainloop()
