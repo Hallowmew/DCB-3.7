@@ -92,7 +92,7 @@ def generate_text(event):
    
     response = random.choice(filtered_sentences)
    
-    chat.insert(END, "Bing: " + response + "\n")
+    chat.insert(END, "Chatbot: " + response + "\n")
 
 
 entry.bind("<Return>", generate_text)
