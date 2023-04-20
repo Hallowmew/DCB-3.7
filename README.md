@@ -1,1 +1,1 @@
-# DCB-3.7-Chatbot
+To run this program, get python ide. Configure text.txt path and then use it. 
